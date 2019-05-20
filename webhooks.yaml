@@ -1,0 +1,27 @@
+host: 0.0.0.0
+port: 21332
+syncPath: hookssync
+conf_update_time
+
+mysql:
+  enable: false
+  user: root
+  password: Test
+  host: 10.10.11.23
+  port
+  db: test
+
+repoip: ['123.0.0.1','177.177.188.2']
+hooks:
+  - uid: werwerwerwerwerwerwe
+    name: webhooks
+    path: testsdfds
+    ip: ['123.0.00.1','122.0.0.1']
+    cmd: ''
+    user: 'sfs'
+    interval: 3
+
+pathWhiteList:
+  - sdfsfsdf
+  - sdfsdfsd
+
