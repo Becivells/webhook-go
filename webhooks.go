@@ -35,10 +35,6 @@ func Webhook(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	fmt.Fprint(w, "Welcome!\n")
 }
 
-func Hello(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	fmt.Fprintf(w, "hello, %s!\n", ps.ByName("name"))
-}
-
 func cmd() string {
 	cmd := exec.Command("ls", "-la")
 	stdout, err := cmd.StdoutPipe()
@@ -53,5 +49,5 @@ func cmd() string {
 func main() {
 	router := httprouter.New()
 	router.GET("/hooksync/:name", Webhook)
-	log.Fatal(http.ListenAndServe(":8080", router))
+	log.Fatal(http.ListenAndServe("0.0.0.0:8080", router))
 }
