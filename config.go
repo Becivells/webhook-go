@@ -42,31 +42,22 @@ type Wconfig struct {
 	Hooks         []*Hook
 }
 
-//table:
-//token: "token"
-//name: "name"
-//path: "path"
-//ip: "ip"
-//cmd: "cmd"
-//user: "user"
-//interval: "interval"
-
 type Table struct {
-	TableName    string `yaml:"tableName"`
-	Token        string `yaml:"gittoken"`
-	Name         string `yaml:"gitname"`
-	Path         string `yaml:"pullpath"`
-	pullip       string `yaml:"pullip"`
-	pullcmd      string `yaml:"pullcmd"`
-	pulluser     string `yaml:"pulluser"`
-	pullinterval string `yaml:"pullinterval"`
+	TableName string `yaml:"tableName"`
+	Token     string `yaml:"token"`
+	Name      string `yaml:"name"`
+	Path      string `yaml:"path"`
+	Ip        string `yaml:"ip"`
+	Cmd       string `yaml:"cmd"`
+	User      string `yaml:"user"`
+	Interval  string `yaml:"interval"`
 }
 
 //SELECT TOKEN
 func (table *Table) FormatSQL() string {
 	buf := bytes.Buffer{}
 	buf.WriteString("SELECT " + table.Token + " AS token," + table.Name + " as name," + table.Path + " as path,")
-	buf.WriteString(table.ip + " as ip," + table.cmd + " as cmd," + table.user + " as user," + table.interval + " as interval")
+	buf.WriteString(table.Ip + " as ip," + table.Cmd + " as cmd," + table.User + " as user," + table.Interval + " as interval")
 	buf.WriteString(" from " + table.TableName)
 	return buf.String()
 
@@ -117,12 +108,11 @@ func initConfig() {
 	ListenIP = config.Host
 	ListenPort = config.Port
 	SyncPath = config.SyncPath
-	fmt.Println(SyncPath)
+
 	RepoIP = make(map[string]int, 20) //初始化
 
 	//git仓库 ip
 	for _, rip := range config.RepoIp {
-		fmt.Println(rip)
 		RepoIP[rip] = 1
 	}
 	dsn = config.MySQL.FormatDSN() //数据库账号密码配置
@@ -130,8 +120,6 @@ func initConfig() {
 	for _, hook := range config.Hooks {
 		token[hook.Token] = hook
 	}
-
-	fmt.Println(config.Table.FormatSQL())
 
 }
 
