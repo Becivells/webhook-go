@@ -34,11 +34,42 @@ type Wconfig struct {
 	Host          string `yaml:"host"`
 	Port          int    `yaml:"port"`
 	SyncPath      string `yaml:"hookPath"`
-	MySQL         *Dsn
+	MySQL         *Dsn   `yaml:"mysql"`
+	Table         *Table
 	RepoIp        []string `yaml:"repoIp,flow"`
 	PathWhiteList []string `yaml:"pathWhiteList,flow"`
 	ExecWhiteList []string `yaml:"execWhiteList,flow"`
 	Hooks         []*Hook
+}
+
+//table:
+//token: "token"
+//name: "name"
+//path: "path"
+//ip: "ip"
+//cmd: "cmd"
+//user: "user"
+//interval: "interval"
+
+type Table struct {
+	TableName    string `yaml:"tableName"`
+	Token        string `yaml:"gittoken"`
+	Name         string `yaml:"gitname"`
+	Path         string `yaml:"pullpath"`
+	pullip       string `yaml:"pullip"`
+	pullcmd      string `yaml:"pullcmd"`
+	pulluser     string `yaml:"pulluser"`
+	pullinterval string `yaml:"pullinterval"`
+}
+
+//SELECT TOKEN
+func (table *Table) FormatSQL() string {
+	buf := bytes.Buffer{}
+	buf.WriteString("SELECT " + table.Token + " AS token," + table.Name + " as name," + table.Path + " as path,")
+	buf.WriteString(table.ip + " as ip," + table.cmd + " as cmd," + table.user + " as user," + table.interval + " as interval")
+	buf.WriteString(" from " + table.TableName)
+	return buf.String()
+
 }
 
 var (
@@ -99,6 +130,8 @@ func initConfig() {
 	for _, hook := range config.Hooks {
 		token[hook.Token] = hook
 	}
+
+	fmt.Println(config.Table.FormatSQL())
 
 }
 

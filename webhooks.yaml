@@ -10,6 +10,16 @@ mysql:
   port: 3306         # 端口号
   schema: test        # 数据库
   charset: utf8
+# 表结构对应的字段
+table:
+  tableName: "webhook"
+  gittoken: "token"
+  gitname: "name"
+  pullpath: "path"
+  pullip: "ip"
+  pullcmd: "cmd"
+  pulluser: "user"
+  pullinterval: "interval"
 repoIp: [ "127.0.0.1","[::1]" ] # 仓库的 IP 地址
 # 路径白名单 要求路径在下列目录
 pathWhiteList:

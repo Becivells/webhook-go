@@ -20,7 +20,7 @@ func loggingHandler(next http.Handler) http.Handler {
 func Webhook(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	gittoken := ps.ByName("gittoken")
 	if mtoken, ok := token[gittoken]; ok {
-		remoteIP := parseIP("[::1]:50380") //获取 IP 地址
+		remoteIP := parseIP(r.RemoteAddr) //获取 IP 地址
 		flag := false
 		//判断是否在该token的访问范围
 		for _, val := range mtoken.Ip {

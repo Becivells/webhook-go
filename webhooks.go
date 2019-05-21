@@ -27,7 +27,7 @@ func main() {
 		prinfConfig()
 	}
 	router := httprouter.New()
-	router.GET("/hookssync/:gittoken", Webhook)
+	router.GET("/"+SyncPath+"/:gittoken", Webhook)
 	log.Printf("Listen %s:%s", ListenIP, strconv.Itoa(ListenPort))
 	log.Fatal(http.ListenAndServe(ListenIP+":"+strconv.Itoa(ListenPort), loggingHandler(router)))
 }
