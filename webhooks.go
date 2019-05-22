@@ -23,6 +23,7 @@ func main() {
 
 	if h || len(os.Args) == 1 {
 		flag.Usage()
+		os.Exit(0)
 	} else if printconfig {
 		prinfConfig()
 	}
