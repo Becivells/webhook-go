@@ -1,0 +1,39 @@
+#!/bin/bash
+
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
+export PATH
+
+#syncip=123.206.177.125  #img
+syncip=123.206.116.149  #web
+
+port=21332
+syncname=hookssync
+
+token=924f6c2e-e13e-11e7-8cc9-e84e062b86ac
+
+#echo color_text
+Color_Text()
+{
+  echo -e " \e[0;$2m$1\e[0m"
+}
+
+Echo_Red()
+{
+  echo $(Color_Text "$1" "31")
+}
+
+Echo_Green()
+{
+  echo $(Color_Text "$1" "32")
+}
+
+Echo_Green 'the code is sync... please wait...'
+Echo_Green '---------------------------sync------------------------------'
+echo ''
+echo ''
+echo ''
+echo ''
+curl -s http://$syncip:$port/$syncname/$token
+echo ''
+Echo_Green '---------------------------sync------------------------------'
+Echo_Green 'Finsh.....'

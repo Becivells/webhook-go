@@ -95,14 +95,6 @@ func (dsn *Dsn) FormatDSN() string {
 	return buf.String()
 }
 
-//TableName string `yaml:"tableName"`
-//Token     string `yaml:"token"`
-//Name      string `yaml:"name"`
-//Path      string `yaml:"path"`
-//Ip        string `yaml:"ip"`
-//Cmd       string `yaml:"cmd"`
-//User      string `yaml:"user"`
-//Interval  string `yaml:"interval"`
 func enabelMysql() {
 	if config.MySQL.Enable {
 		log.Println("use MySQL and yaml file...")

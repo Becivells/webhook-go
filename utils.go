@@ -58,10 +58,3 @@ func pullCode(hook *Hook) string {
 
 	return OsShell(shell)
 }
-
-//var db *sql.DB
-//
-func init() {
-	//db, err := sql.Open("mysql", "ty_hl_seevul_com:F5RXLmNmDXSTCJMH@tcp(10.10.100.60:3306)/ty_hl_seevul_com?charset=utf8")
-
-}
