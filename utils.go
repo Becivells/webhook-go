@@ -45,11 +45,11 @@ func Validate(reg []string, cmd string) bool {
 func pullCode(hook *Hook) string {
 	//检查路径是否合法
 	if !Validate(config.PathWhiteList, hook.Path) {
-		return "非法操作"
+		return fmt.Sprintf("非法操作不在路径白名单内")
 	}
 	//检查命令是否合法
 	if !Validate(config.ExecWhiteList, hook.Cmd) {
-		return "非法操作"
+		return "非法操作不在命令白名单内"
 	}
 
 	var shell []string

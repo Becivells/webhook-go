@@ -34,15 +34,17 @@ type Hook struct {
 	Interval int      `yaml:"interval"`
 }
 type Wconfig struct {
-	Host          string `yaml:"host"`
-	Port          int    `yaml:"port"`
-	SyncPath      string `yaml:"hookPath"`
-	MySQL         *Dsn   `yaml:"mysql"`
-	Table         *Table
-	RepoIp        []string `yaml:"repoIp,flow"`
-	PathWhiteList []string `yaml:"pathWhiteList,flow"`
-	ExecWhiteList []string `yaml:"execWhiteList,flow"`
-	Hooks         []*Hook
+	Host           string `yaml:"host"`
+	TokenMinLength int    `yaml:"tokenMinLength"`
+	TokenMaxLength int    `yaml:"tokenMaxLength"`
+	Port           int    `yaml:"port"`
+	SyncPath       string `yaml:"hookPath"`
+	MySQL          *Dsn   `yaml:"mysql"`
+	Table          *Table
+	RepoIp         []string `yaml:"repoIp,flow"`
+	PathWhiteList  []string `yaml:"pathWhiteList,flow"`
+	ExecWhiteList  []string `yaml:"execWhiteList,flow"`
+	Hooks          []*Hook
 }
 
 type Table struct {

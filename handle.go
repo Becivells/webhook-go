@@ -19,7 +19,7 @@ func loggingHandler(next http.Handler) http.Handler {
 func Webhook(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	gittoken := ps.ByName("gittoken")
 	//判断token长度
-	if len(gittoken) > 33 || len(gittoken) < 10 {
+	if len(gittoken) > config.TokenMaxLength || len(gittoken) < config.TokenMinLength {
 		w.Write([]byte("token 长度不符合"))
 		w.WriteHeader(400)
 
@@ -69,32 +69,37 @@ func Webhook(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 			}
 		} else {
 			//同步判断一下
-			Qtoken := Querytoken(gittoken)
-			if Qtoken.Token == gittoken {
-				remoteIP := parseIP(r.RemoteAddr) //获取 IP 地址
-				flag := false
+			if config.MySQL.Enable {
+				Qtoken := Querytoken(gittoken)
+				if Qtoken.Token == gittoken {
+					remoteIP := parseIP(r.RemoteAddr) //获取 IP 地址
+					flag := false
 
-				//允许 git 仓库的IP访问范围
-				if _, ok := RepoIP[remoteIP]; ok {
-					flag = true
+					//允许 git 仓库的IP访问范围
+					if _, ok := RepoIP[remoteIP]; ok {
+						flag = true
 
-				} else {
-					//判断是否在该token的访问范围
-					for _, val := range Qtoken.Ip {
-						if val == remoteIP {
-							flag = true
-							break
+					} else {
+						//判断是否在该token的访问范围
+						for _, val := range Qtoken.Ip {
+							if val == remoteIP {
+								flag = true
+								break
+							}
 						}
 					}
-				}
-				if flag == true {
-					w.Write([]byte("-------------git同步------------\r\n"))
-					w.Write([]byte(pullCode(Qtoken)))
-				} else {
-					w.Write([]byte("禁止访问"))
-					w.WriteHeader(403)
-				}
+					if flag == true {
+						w.Write([]byte("-------------git同步------------\r\n"))
+						w.Write([]byte(pullCode(Qtoken)))
+					} else {
+						w.Write([]byte("禁止访问"))
+						w.WriteHeader(403)
+					}
 
+				} else {
+					w.Write([]byte("token 无效"))
+					w.WriteHeader(404)
+				}
 			} else {
 				w.Write([]byte("token 无效"))
 				w.WriteHeader(404)
