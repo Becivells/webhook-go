@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os/exec"
+	"regexp"
 	"strings"
 )
 
@@ -12,11 +12,10 @@ func OsShell(command []string) string {
 
 	cmd := exec.Command(command[1], command[2:]...)
 	cmd.Dir = command[0]
-	stdout, err := cmd.StdoutPipe()
-	cmd.Start()
-	content, err := ioutil.ReadAll(stdout)
+	content, err := cmd.CombinedOutput()
+
 	if err != nil {
-		fmt.Println(err)
+		return fmt.Sprintf("%s", err)
 	}
 	return string(content) //输出ls命令查看到的内容
 }
@@ -32,28 +31,37 @@ func parseIP(ipstr string) string {
 	return ip
 }
 
-func pullCode(hook *Hook) string {
-	var cmdstr string
+func Validate(reg []string, cmd string) bool {
 
-	return cmdstr
+	for _, val := range reg {
+		if regexp.MustCompile(val).MatchString(cmd) {
+			return true
+			break
+		}
+	}
+	return false
+}
+
+func pullCode(hook *Hook) string {
+	//检查路径是否合法
+	if !Validate(config.PathWhiteList, hook.Path) {
+		return "非法操作"
+	}
+	//检查命令是否合法
+	if !Validate(config.ExecWhiteList, hook.Cmd) {
+		return "非法操作"
+	}
+
+	var shell []string
+	shell = append(shell, hook.Path)
+	shell = append(shell, strings.Split(hook.Cmd, " ")...)
+
+	return OsShell(shell)
 }
 
 //var db *sql.DB
 //
-//func init() {
-//	db, err := sql.Open("mysql", "ty_hl_seevul_com:F5RXLmNmDXSTCJMH@tcp(10.10.100.60:3306)/ty_hl_seevul_com?charset=utf8")
-//	if err != nil {
-//		log.Print(err)
-//	}
+func init() {
+	//db, err := sql.Open("mysql", "ty_hl_seevul_com:F5RXLmNmDXSTCJMH@tcp(10.10.100.60:3306)/ty_hl_seevul_com?charset=utf8")
 
-//	rows, err := db.Query("SELECT id,URL from webinfos")
-//	if err != nil {
-//		log.Print(err)
-//	}
-//	for rows.Next() {
-//		var id, url string
-//		err = rows.Scan(&id, &url)
-//		fmt.Println(id, url)
-//
-//	}
-//}
+}

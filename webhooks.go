@@ -3,10 +3,10 @@ package main
 import (
 	"flag"
 	"github.com/julienschmidt/httprouter"
+	"net/http"
 	"strconv"
 
 	"log"
-	"net/http"
 	"os"
 )
 
