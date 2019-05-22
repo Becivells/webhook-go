@@ -12,8 +12,8 @@ import (
 
 func init() {
 	flag.BoolVar(&h, "h", false, "this help")
-	flag.StringVar(&configPath, "c", "webhooks.yaml", "webhook的配置文件必须是")
-	flag.BoolVar(&printconfig, "p", false, "打印配置文件")
+	flag.StringVar(&configPath, "c", "webhooks.yaml", "webhook 的配置文件")
+	flag.BoolVar(&printconfig, "p", false, "打印配置文件需要配合 -c 使用")
 }
 
 func main() {
