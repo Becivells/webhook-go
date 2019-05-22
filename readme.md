@@ -54,3 +54,22 @@
 注意事项
 
 1.CentOS 防火墙记得放行21332端口或者直接关闭防火墙`systemctl stop firewalld;systemctl disable firewalld`
+
+dev 
+```
+set GO111MODULE=on
+
+go mod init  projectName
+go mod tidy
+```
+
+go mod help查看帮助
+go mod init<项目模块名称>初始化模块，会在项目根目录下生成 go.mod文件。
+
+go mod tidy根据go.mod文件来处理依赖关系。
+
+go mod vendor将依赖包复制到项目下的 vendor目录。建议一些使用了被墙包的话可以这么处理，方便用户快速使用命令go build -mod=vendor编译
+
+go list -m all显示依赖关系。go list -m -json all显示详细依赖关系。
+
+go mod download <path@version>下载依赖。参数<path@version>是非必写的，path是包的路径，version是包的版本。
