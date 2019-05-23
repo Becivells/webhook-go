@@ -38,16 +38,16 @@ execWhiteList:
 
 # 项目 token 配置
 hooks:
-- token: "9901b6deb47111e7b832704d7b885ead"                                         # 项目同步的 token
+- token: "9901b6deb47111e7b832704d7b885ead"             # 项目同步的 token
   name: win10-ui                                        # 项目名称
-  path: "/www/wwwroot/win10-ui/"                                       # 项目路径
+  path: "/www/wwwroot/win10-ui/"                        # 项目路径
   ip: ['122.0.0.1']                                     # 只允许某个 IP 访问单个项目
   cmd: "git pull origin master"                         # 执行的命令
   user: 'www'                                           # 执行命令的用户
   interval: 3                                           #  间隔执行时间
-- token: "x901b6deb47111e7b832704d7b885efz"                                         # 项目同步的 token
-  name: "ty.hl.seevul.com"                                        # 项目名称
-  path: "/www/wwwroot/ty.hl.seevul.com/"                                       # 项目路径
+- token: "x901b6deb47111e7b832704d7b885efz"             # 项目同步的 token
+  name: "ty.hl.seevul.com"                              # 项目名称
+  path: "/www/wwwroot/ty.hl.seevul.com/"                # 项目路径
   ip: ['123.0.3.1','122.0.2.1']                         # 只允许某个 IP 访问单个项目
   cmd: "git pull origin master"                         # 执行的命令
   user: 'www'                                           # 执行命令的用户

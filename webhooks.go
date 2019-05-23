@@ -2,11 +2,10 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"github.com/julienschmidt/httprouter"
-	"net/http"
-	"strconv"
-
 	"log"
+	"net/http"
 	"os"
 )
 
@@ -28,7 +27,7 @@ func main() {
 		prinfConfig()
 	}
 	router := httprouter.New()
-	router.GET("/"+SyncPath+"/:gittoken", Webhook)
-	log.Printf("Listen %s:%s", ListenIP, strconv.Itoa(ListenPort))
-	log.Fatal(http.ListenAndServe(ListenIP+":"+strconv.Itoa(ListenPort), loggingHandler(router)))
+	router.GET(fmt.Sprintf("/%s/:gittoken", SyncPath), Webhook)
+	log.Printf(fmt.Sprintf("Listen: %s:%d", ListenIP, ListenPort))
+	log.Fatal(http.ListenAndServe(fmt.Sprintf("%s:%d", ListenIP, ListenPort), loggingHandler(router)))
 }
