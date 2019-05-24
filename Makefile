@@ -118,7 +118,6 @@ release: build
 		done ;\
 	done
 
-
 .PHONY: init
 init:
 	@echo "$(CGREEN)go mod init $(GITREPO) ...$(CEND)"
@@ -168,7 +167,6 @@ pdownload: export https_proxy=$(HTTPPROXY)
 pdownload:
 	@echo "$(CGREEN)go mod download $(GITREPO) ...$(CEND)"
 	go mod download
-
 
 .PHONY: server
 server: build
