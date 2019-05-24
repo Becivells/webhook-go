@@ -4,7 +4,7 @@
 # $ checkmake Makefile
 # Copy https://github.com/XiaoMi/soar  author @martianzhang
 
-BINARY=webhooks
+BINARY=webhooks-go
 GITREPO=github.com:Becivells/webhook-go
 GOPATH ?= $(shell go env GOPATH)
 # Ensure GOPATH is set before running build process.
@@ -28,11 +28,13 @@ CYELLOW=$(shell echo "\033[93m")
 CEND=$(shell echo "\033[0m")
 endif
 
+HTTPPROXY=http://127.0.0.1:8118
+
 .PHONY: all
 all: | fmt build
 
 .PHONY: go_version_check
-GO_VERSION_MIN=1.10
+GO_VERSION_MIN=1.11
 # Parse out the x.y or x.y.z version and output a single value x*10000+y*100+z (e.g., 1.9 is 10900)
 # that allows the three components to be checked in a single comparison.
 VER_TO_INT:=awk '{split(substr($$0, match ($$0, /[0-9\.]+/)), a, "."); print a[1]*10000+a[2]*100+a[3]}'
@@ -116,22 +118,6 @@ release: build
 		done ;\
 	done
 
-.PHONY: proxy
-proxy:
-	@echo "$(CGREEN)set proxy $(GITREPO) ...$(CEND)"
-    set http_proxy=http://127.0.0.1:8118
-    set https_proxy=http://127.0.0.1:8118
-
-.PHONY: setproxy
-setproxy:
-	@echo "$(CGREEN)set proxy $(GITREPO) ...$(CEND)"
-    @export http_proxy=http://127.0.0.1:8118
-    @export https_proxy=http://127.0.0.1:8118
-
-.PHONY: unsetproxy
-unproxy:
-	unset http_proxy=
-	unset https_proxy=
 
 .PHONY: init
 init:
@@ -139,7 +125,7 @@ init:
 	go mod init $(GITREPO)
 
 .PHONY: tidy
-tidy: proxy
+tidy:
 	@echo "$(CGREEN)go mod tidy $(GITREPO) ...$(CEND)"
 	go mod tidy
 
@@ -165,12 +151,37 @@ edit:
 	go mod edit $(edit)
 
 .PHONY: download
-download: proxy
+download:
 	@echo "$(CGREEN)go mod download $(GITREPO) ...$(CEND)"
 	go mod download
 
+.PHONY: ptidy
+ptidy: export http_proxy=$(HTTPPROXY)
+ptidy: export https_proxy=$(HTTPPROXY)
+ptidy:
+	@echo "$(CGREEN)go mod tidy $(GITREPO) ...$(CEND)"
+	go mod tidy
+
+.PHONY: pdownload
+pdownload: export http_proxy=$(HTTPPROXY)
+pdownload: export https_proxy=$(HTTPPROXY)
+pdownload:
+	@echo "$(CGREEN)go mod download $(GITREPO) ...$(CEND)"
+	go mod download
+
+
+.PHONY: server
+server: build
+	@echo "$(CGREEN)go mod edit $(GITREPO) ...$(CEND)"
+	bin/webhook-go -c webhooks.yaml
+
+.PHONY: curl
+curl:
+	@echo "$(CGREEN)go mod edit $(GITREPO) ...$(CEND)"
+	curl myip.ipip.net
 # Cleans our projects: deletes binaries
 .PHONY: clean
+
 clean:
 	@echo "$(CGREEN)Cleanup ...$(CEND)"
 	go clean
@@ -186,5 +197,4 @@ clean:
 	rm -f ${BINARY} coverage.*
 	find . -name "*.log" -delete
 	git clean -fi
-	docker stop soar-mysql 2>/dev/null || true
 
