@@ -1,0 +1,12 @@
+[Unit]
+Description="webhooks@Author becivells git webhooks"
+After=rc-local.service nss-user-lookup.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+ExecStart=/opt/webhooks/webhooks -c /opt/webhooks/webhooks.yaml
+
+[Install]
+WantedBy=multi-user.target
