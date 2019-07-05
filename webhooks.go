@@ -27,7 +27,8 @@ func main() {
 		prinfConfig()
 	}
 	router := httprouter.New()
-	router.GET(fmt.Sprintf("/%s/:gittoken", SyncPath), Webhook)
+	router.GET(fmt.Sprintf("/%s/:gittoken", SyncPath), ShellWebhook)  //使用 shell 方式
+	router.POST(fmt.Sprintf("/%s/:gittoken", SyncPath), ShellWebhook) //gogs 等临时使用
 	log.Printf(fmt.Sprintf("Listen: %s:%d", ListenIP, ListenPort))
 	log.Fatal(http.ListenAndServe(fmt.Sprintf("%s:%d", ListenIP, ListenPort), loggingHandler(router)))
 }

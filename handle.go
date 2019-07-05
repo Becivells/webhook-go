@@ -16,7 +16,7 @@ func loggingHandler(next http.Handler) http.Handler {
 	})
 }
 
-func Webhook(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func ShellWebhook(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	gittoken := ps.ByName("gittoken")
 	//判断token长度
 	if len(gittoken) > config.TokenMaxLength || len(gittoken) < config.TokenMinLength {
