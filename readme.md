@@ -32,7 +32,6 @@ stdout_logfile_maxbytes=10MB                        ;标准日志大小
 mysql:
 enable: true                   # 改为true 并配置数据库账号密码
 
-
 ```
 
 4. 使 supervisor 自启动
@@ -98,3 +97,9 @@ go mod tidy
 
 `go mod download`  path@version下载依赖。参数path@version是非必写的，path是包的路径，version是包的版本。
 
+
+# error info 
+1. exit status 1
+部署秘钥的的证书不对.更换证书试试，可以手工输出命令试试
+2. 访问过于频繁
+如果是正常访问可以调短间隔时间
