@@ -1,11 +1,21 @@
 package main
 
 import (
+	"fmt"
 	"github.com/julienschmidt/httprouter"
 	"log"
 	"net/http"
 	"time"
 )
+
+func printVersion() {
+	fmt.Printf("Version: %s\n", Version)
+	fmt.Printf("Compile: %s\n", Compile)
+	fmt.Printf("Branch: %s\n", Branch)
+	fmt.Printf("GitDirty: %s\n", GitDirty)
+	fmt.Printf("DevPath: %s\n", DevPath)
+	fmt.Println("\n")
+}
 
 func loggingHandler(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -66,6 +76,7 @@ func ShellWebhook(w http.ResponseWriter, r *http.Request, ps httprouter.Params) 
 
 			} else { //在访问IP范围内
 				w.Write([]byte("禁止访问"))
+				w.WriteHeader(403)
 			}
 		} else {
 			//同步判断一下

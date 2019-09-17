@@ -83,6 +83,11 @@ var (
 	SyncPath    string
 	LimitIP     map[string]time.Time
 	db          *sql.DB
+	Version     string
+	Compile     string
+	Branch      string
+	GitDirty    string
+	DevPath     string
 )
 
 //得到 dsn 字符串

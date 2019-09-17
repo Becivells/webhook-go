@@ -21,6 +21,7 @@ func main() {
 	initConfig() //初始化配置 或者重载配置
 
 	if h || len(os.Args) == 1 {
+		printVersion()
 		flag.Usage()
 		os.Exit(0)
 	} else if printconfig {
