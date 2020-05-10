@@ -1,18 +1,19 @@
 version: "2.0"
 services:
   centos7_build:
-    image: centos:7
+    build: ./docker/package/images/rhel-compliant/rhel7/dockerfile/
     volumes:
-      - ./docker/images/package/rhel-compliant/rhel7/rpmmacros/:/root/
-      - ./docker/images/package/rhel-compliant/rhel7/entrypoint/:/opt/entrypoint/
-      - - ./docker/images/package/rhel-compliant/services/systemd/:/opt/services/
-      - ./:/opt/package/
+      - ./docker/package/images/rhel-compliant/rhel7/rpmmacros/:/root/
+      - ./docker/package/images/rhel-compliant/rhel7/entrypoint/:/opt/entrypoint/:ro
+      - ./docker/package/images/rhel-compliant/services/systemd/:/opt/services/:ro
+      - ./docker/package/images/rhel-compliant/rhel7/SPEC/:/opt/SPEC/:ro
+      - ./:/opt/package/:ro
+      - ./packages:/packages/
     environment:
       - BINARY
       - GITREPO
       - CURVER
-      - VERSION_TAG
-      - PKG_RELEASE=centos7
+      - RELEASE
       - ARCH=amd64
       - OS=linux
     command:

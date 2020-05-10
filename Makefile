@@ -4,8 +4,10 @@
 # $ checkmake Makefile
 # Copy https://github.com/XiaoMi/soar  author @martianzhang
 
-BINARY=webhook
-GITREPO=github.com:Becivells/pocfinger
+export BINARY=webhooks
+export CURVER?=0.1.3
+export RELEASE=1
+export GITREPO=github.com:Becivells/pocfinger
 GOPATH ?= $(shell go env GOPATH)
 # Ensure GOPATH is set before running build process.
 ifeq "$(GOPATH)" ""
@@ -34,7 +36,6 @@ CGREEN=$(shell echo "\033[92m")
 CYELLOW=$(shell echo "\033[93m")
 CEND=$(shell echo "\033[0m")
 endif
-
 HTTPPROXY=http://127.0.0.1:8118
 
 .PHONY: all
@@ -116,10 +117,10 @@ release: build
 				b=${BINARY} ; \
 				if [ "$${GOOS}" = 'windows' ]; then\
 				echo "Building $${b}.$${GOOS}-$${GOARCH}.exe ..."; \
-				GOOS=$${GOOS} GOARCH=$${GOARCH} go build ${GCFLAGS} ${LDFLAGS} -v -o release/$${b}.$${GOOS}-$${GOARCH}-${VERSION_TAG}.exe $$d 2>/dev/null ; \
+				GOOS=$${GOOS} GOARCH=$${GOARCH} go build ${GCFLAGS} ${LDFLAGS} -v -o release/$${b}.$${GOOS}-$${GOARCH}-${CURVER}.exe $$d 2>/dev/null ; \
 				else \
 				echo "Building $${b}.$${GOOS}-$${GOARCH} ..."; \
-				GOOS=$${GOOS} GOARCH=$${GOARCH} go build ${GCFLAGS} ${LDFLAGS} -v -o release/$${b}.$${GOOS}-$${GOARCH}-${VERSION_TAG} $$d 2>/dev/null ; \
+				GOOS=$${GOOS} GOARCH=$${GOARCH} go build ${GCFLAGS} ${LDFLAGS} -v -o release/$${b}.$${GOOS}-$${GOARCH}-${CURVER} $$d 2>/dev/null ; \
 				fi \
 			done ; \
 		done ;\
@@ -202,3 +203,10 @@ clean:
 	find . -name "*.log" -delete
 	git clean -fi
 
+.PHONY: rhel7
+rhel7: packages/${BINARY}-${CURVER}-${RELEASE}.el7.x86_64.rpm
+
+
+packages/${BINARY}-${CURVER}-${RELEASE}.el7.x86_64.rpm:
+	docker-compose up centos7_build
+	docker-compose rm -f
