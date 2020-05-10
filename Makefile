@@ -4,8 +4,8 @@
 # $ checkmake Makefile
 # Copy https://github.com/XiaoMi/soar  author @martianzhang
 
-BINARY=webhooks-go
-GITREPO=github.com:Becivells/webhook-go
+BINARY=webhook
+GITREPO=github.com:Becivells/pocfinger
 GOPATH ?= $(shell go env GOPATH)
 # Ensure GOPATH is set before running build process.
 ifeq "$(GOPATH)" ""
@@ -95,7 +95,7 @@ build: fmt
 	@mkdir -p bin
 
 	@ret=0 && for d in $$(go list -f '{{if (eq .Name "main")}}{{.ImportPath}}{{end}}' ./...); do \
-		b=$$(basename $${d}) ; \
+		b=$(basename $${d}) $; \
 		go build ${GCFLAGS} ${LDFLAGS} -o bin/$${b} $$d || ret=$$? ; \
 	done ; exit $$ret
 	@echo "build Success!"
@@ -113,13 +113,13 @@ release: build
 	@for GOOS in darwin linux windows; do \
 		for GOARCH in amd64; do \
 			for d in $$(go list -f '{{if (eq .Name "main")}}{{.ImportPath}}{{end}}' ./...); do \
-				b=$$(basename $${d}) ; \
+				b=${BINARY} ; \
 				if [ "$${GOOS}" = 'windows' ]; then\
 				echo "Building $${b}.$${GOOS}-$${GOARCH}.exe ..."; \
-				GOOS=$${GOOS} GOARCH=$${GOARCH} go build ${GCFLAGS} ${LDFLAGS} -v -o release/$${b}.$${GOOS}-$${GOARCH}.exe $$d 2>/dev/null ; \
+				GOOS=$${GOOS} GOARCH=$${GOARCH} go build ${GCFLAGS} ${LDFLAGS} -v -o release/$${b}.$${GOOS}-$${GOARCH}-${VERSION_TAG}.exe $$d 2>/dev/null ; \
 				else \
 				echo "Building $${b}.$${GOOS}-$${GOARCH} ..."; \
-				GOOS=$${GOOS} GOARCH=$${GOARCH} go build ${GCFLAGS} ${LDFLAGS} -v -o release/$${b}.$${GOOS}-$${GOARCH} $$d 2>/dev/null ; \
+				GOOS=$${GOOS} GOARCH=$${GOARCH} go build ${GCFLAGS} ${LDFLAGS} -v -o release/$${b}.$${GOOS}-$${GOARCH}-${VERSION_TAG} $$d 2>/dev/null ; \
 				fi \
 			done ; \
 		done ;\
