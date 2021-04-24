@@ -1,0 +1,65 @@
+# This is an example goreleaser.yaml file with some sane defaults.
+# Make sure to check the documentation at http://goreleaser.com
+# https://goreleaser.com/customization/build/
+project_name: webhooks
+gomod:
+  proxy: true
+builds:
+  - env: [CGO_ENABLED=0]
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - 386
+      - arm64
+    ignore:
+      - goos: darwin
+        goarch: 386
+archives:
+  -
+    format_overrides:
+      - goos: windows
+        format: zip
+    files:
+      - rpmfile/*
+      - webhooks.yaml
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Tag }}-next"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^test:'
+# https://nfpm.goreleaser.com/configuration/
+nfpms:
+  - maintainer: becivells <becivells@qq.com>
+    replacements:
+      amd64: 64-bit
+      386: 32-bit
+      darwin: macOS
+      linux: linux
+    description: webhooks@Author becivells git webhooks
+    homepage: https://github.com/becivells/webhook-go
+    bindir: /opt/webhooks/
+    contents:
+      - src: "rpmfile/webhooks.service"
+        dst: "/usr/lib/systemd/system/webhooks.service"
+        file_info:
+          mode: 0644
+          owner: root
+          group: root
+      - src: "webhooks.yaml"
+        dst: "/opt/webhooks/webhooks.yaml"
+        type: config|noreplace
+        file_info:
+          mode: 0644
+          owner: root
+          group: root
+    license: MIT
+    formats:
+      - deb
+      - rpm
